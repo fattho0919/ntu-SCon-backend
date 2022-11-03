@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/users.js';
 
 const signup = (req, res, next) => {
+  console.log(req);
   // checks if email already exists
   User.findOne({ where : {
     email: req.body.email, 
@@ -19,6 +20,7 @@ const signup = (req, res, next) => {
           return User.create(({
             email: req.body.email,
             name: req.body.name,
+            corporation: req.body.corporation,
             password: passwordHash,
           }))
           .then(() => {
