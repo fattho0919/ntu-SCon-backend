@@ -9,13 +9,13 @@ module.exports = (req, res, next) => {
   if (req.path === "/register") {
     console.log([name, corporation, email, password]);
     if (![name, corporation, email, password].every(Boolean)) {  // what is every() do?
-      return res.status(401).json("Missing Credentials - 1");
+      return res.status(401).json("Missing Credentials");
     } else if (!validEmail(email)) {
       return res.status(401).json("Invalid Email");
     }
   } else if (req.path === "/login") {
     if (![email, password].every(Boolean)) {
-      return res.status(401).json("Missing Credentials - 2");
+      return res.status(401).json("Missing Credentials");
     } else if (!validEmail(email)) {
       return res.status(401).json("Invalid Email");
     }

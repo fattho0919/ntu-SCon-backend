@@ -20,19 +20,23 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 			return res.send('User already exist.');
 		}
 
+		// 密碼加密
 		const saltRounds = 10;
 		const salt = await bcrypt.genSalt(saltRounds);
 		const bcryptPassword = await bcrypt.hash(password, salt);
 		
+		// 用戶註冊資料存入資料庫
 		const newUser = await pool.query(
 			"INSERT INTO users (user_name, user_corporation, user_email, user_password) VALUES ($1, $2, $3, $4) RETURNING *",
 			[name, corporation, email, bcryptPassword]
 		);
 
+		// for檢查用戶資料
 		console.log(user.rows[0]);
+		// 產生jwt
 		const token = jwtGenerator(newUser.rows[0].user_id);
 
-		// Send required information back to frontend
+		// 把token與部分用戶資料送回APP
 		res.json({ token, "user":{"email": `${email}`, "name": `${name}`}, "corporation": `${corporation}` });
 
 	} catch (err) {
@@ -50,16 +54,18 @@ router.post("/login", validInfo, async (req, res) => {
 			email
 		]);
 
+		// 檢查用戶是否存在
 		if (user.rows.length === 0) {
 			return res.status(401).json("User doesn't exist.");
 		}
 
+		// 將輸入之密碼和資料庫中的密碼做比對
 		const validPassword = await bcrypt.compare(
 			password, user.rows[0].user_password
 		);
 
 		if (!validPassword) {
-			return res.status(401).json("Email or Password is incorrect.");
+			return res.status(401).json("Password is incorrect.");
 		}
 
 		console.log(user.rows[0]);
@@ -74,6 +80,13 @@ router.post("/login", validInfo, async (req, res) => {
 	
 });
 
+// logout
+// router.post("/logout", async(req, res) => {
+// 	console.log(req);
+// 	console.log('logout alert');
+	
+// });
+
 router.get("/is-verify", authorization, async (req, res) => {
 	try {
 
@@ -81,7 +94,7 @@ router.get("/is-verify", authorization, async (req, res) => {
 		
 	} catch (err) {
 		console.log(err.message);
-		res.status(500).send("Server Error - 3");
+		res.status(500).send("Server Error");
 	}
 });
 
