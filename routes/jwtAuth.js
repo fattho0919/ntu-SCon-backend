@@ -9,7 +9,7 @@ const authorization = require("../middleware/authorization");
 router.post("/register", validInfo, async(req, res) => {	// validInfo to verify the email and password
 	try {
 			
-		const { name, corporation, email, password } = req.body;
+		const { name, corporation, email, password, permission } = req.body;
 
 		const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [
 			email
@@ -27,8 +27,8 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 		
 		// 用戶註冊資料存入資料庫
 		const newUser = await pool.query(
-			"INSERT INTO users (user_name, user_corporation, user_email, user_password) VALUES ($1, $2, $3, $4) RETURNING *",
-			[name, corporation, email, bcryptPassword]
+			"INSERT INTO users (user_name, user_corporation, user_email, user_password, user_permission) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+			[name, corporation, email, bcryptPassword, permission]
 		);
 
 		// for檢查用戶資料
@@ -37,7 +37,7 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 		const token = jwtGenerator(newUser.rows[0].user_id);
 
 		// 把token與部分用戶資料送回APP
-		res.json({ token, "user":{"email": `${email}`, "name": `${name}`}, "corporation": `${corporation}` });
+		res.json({ token, "user":{"name": `${name}`, "corporation": `${corporation}`, "email": `${email}`, "permission": `${permission}` }});
 
 	} catch (err) {
 		console.log(err.message);
@@ -54,7 +54,7 @@ router.post("/login", validInfo, async (req, res) => {
 			email
 		]);
 
-		// 檢查用戶是否存在
+		// 根據email檢查用戶是否存在
 		if (user.rows.length === 0) {
 			return res.status(401).json("User doesn't exist.");
 		}
@@ -64,13 +64,15 @@ router.post("/login", validInfo, async (req, res) => {
 			password, user.rows[0].user_password
 		);
 
+		// 若密碼不符，return密碼錯誤訊息
 		if (!validPassword) {
 			return res.status(401).json("Password is incorrect.");
 		}
 
 		console.log(user.rows[0]);
-		const token = jwtGenerator(user.rows[0].user_id);
-		// res.json({ token });
+		const token = await jwtGenerator(user.rows[0].user_id);
+
+		// 把token與部分用戶資料送回APP
 		res.json({ token, "user":{"email": `${email}`, "name": `${user.rows[0].user_name}`} });
 		
 	} catch (err) {
@@ -79,13 +81,6 @@ router.post("/login", validInfo, async (req, res) => {
 	}
 	
 });
-
-// logout
-// router.post("/logout", async(req, res) => {
-// 	console.log(req);
-// 	console.log('logout alert');
-	
-// });
 
 router.get("/is-verify", authorization, async (req, res) => {
 	try {

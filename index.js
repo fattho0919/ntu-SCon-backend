@@ -13,6 +13,8 @@ app.use("/auth", require("./routes/jwtAuth"));
 
 app.use("/dashboard", require("./routes/dashboard"));
 
+app.use("/projects", require("./routes/projects"));
+
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
 });
