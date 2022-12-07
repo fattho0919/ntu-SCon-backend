@@ -73,13 +73,12 @@ router.post("/login", validInfo, async (req, res) => {
 		const token = await jwtGenerator(user.rows[0].user_id);
 
 		// 把token與部分用戶資料送回APP
-		res.json({ token, "user":{"name": `${user.rows[0].name}`, "corporation": `${user.rows[0].corporation}`, "email": `${user.rows[0].email}`, "permission": `${user.rows[0].permission}`}});
+		res.json({ token, "user":{"name": `${user.rows[0].user_name}`, "corporation": `${user.rows[0].user_corporation}`, "email": `${user.rows[0].user_email}`, "permission": `${user.rows[0].user_permission}`}});
 		
 	} catch (err) {
 		console.log(err.message);
 		res.status(500).send("Server Error");
 	}
-	
 });
 
 router.get("/is-verify", authorization, async (req, res) => {
