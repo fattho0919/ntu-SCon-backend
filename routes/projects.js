@@ -2,16 +2,20 @@ const router = require('express').Router();
 const pool = require('../db');
 const authorization = require('../middleware/authorization');
 
-router.post('/', async (req, res) => {
+// 專案管理員:新增專案用
+router.post('/', authorization, async(req, res) => {
   try {
     console.log(req.body);
     const { name, address, corporation, manager, inspector, email } = req.body;
-    // 不確定專案名稱是否具有唯一性
-    // const project = await pool.query(
-    //   "SELECT * FROM projects WHERE project_name = $1", [
-    //     name
-    //   ]
-    // );
+
+    // 從資料庫中找同名專案(專案名稱是否應具唯一性?)
+    /* 
+    const project = await pool.query(
+      "SELECT * FROM projects WHERE project_name = $1", [
+        name
+      ]
+    );
+    */
 
     const newProject = await pool.query(
       "INSERT INTO projects (project_name, project_address, project_corporation, project_manager, project_inspector, project_email) VALUES ($1, $2, $3, $4, $5, $6)",
@@ -19,9 +23,7 @@ router.post('/', async (req, res) => {
     );
 
     // 這邊應該要設計資料庫查詢的語法(比較複雜的、關聯table的)
-    // const projects = await pool.query(
-    //   "SELECT * FROM projects"
-    // );
+    /* const projects = await pool.query("SELECT * FROM projects"); */
 
     res.json(newProject);
     
@@ -30,5 +32,46 @@ router.post('/', async (req, res) => {
     res.status(500).json("Server Error.");
   }
 });
+
+// 管理員:使用者資訊頁面/專案清單
+router.get('/all', authorization, async(req, res) => {
+  try {
+    
+    const allProjects = await pool.query('SELECT * FROM projects');
+
+    res.json(allProjects);  // 暫時將所有欄位回傳
+
+  } catch (error) {
+
+    console.log(`get all projects error: ${error}`);
+
+    res.status(500).json("Server Error.");
+
+  }  
+});
+
+// 專案管理員:使用者資訊頁面/專案清單(特定公司)
+router.get('/corporation', authorization, async(req, res) => {
+
+  //與前端確認request body內容
+  let corporation = req.body.corporation;
+  
+  try {        
+
+    const subProjects = await pool.query('SELECT * FROM projects WHERE project_corporation = $1', [
+      corporation
+    ]);
+
+    res.json(subProjects);
+
+  } catch (error) {
+
+    console.log(`get projects from ${corporation} error: ${error}`);
+
+    res.status(500).json("Server Error.");
+
+  }
+});
+
 
 module.exports = router;
