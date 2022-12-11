@@ -1,15 +1,15 @@
 const router = require('express').Router();
-const pool = require("../db");
+const pool = require('../db');
 const bcrypt = require('bcrypt');
 const jwtGenerator = require('../utils/jwtGenerator');
-const validInfo = require("../middleware/validInfo");
-const authorization = require("../middleware/authorization");
+const validInfo = require("../middleware/validInfo");	// 確認信箱格式、必填資訊是否存在
+const authorization = require("../middleware/authorization");	// 
 
 // register
-router.post("/register", validInfo, async(req, res) => {	// validInfo to verify the email and password
+router.post('/register', validInfo, async(req, res) => {	// validInfo to verify the email and password
 	try {
 			
-		const { name, corporation, email, password, permission } = req.body;
+		const { name, corporation, email, password } = req.body;
 
 		const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [
 			email
@@ -28,7 +28,7 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 		// 用戶註冊資料存入資料庫
 		const newUser = await pool.query(
 			"INSERT INTO users (user_name, user_corporation, user_email, user_password, user_permission) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-			[name, corporation, email, bcryptPassword, permission]
+			[name, corporation, email, bcryptPassword]
 		);
 
 		// for檢查用戶資料
@@ -37,7 +37,7 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 		const token = jwtGenerator(newUser.rows[0].user_id);
 
 		// 把token與部分用戶資料送回APP
-		res.json({ token, "user":{"name": `${name}`, "corporation": `${corporation}`, "email": `${email}`, "permission": `${permission}` }});
+		res.json({ token, "user":{"name": `${name}`, "corporation": `${corporation}`, "email": `${email}` }});
 
 	} catch (err) {
 		console.log(err.message);
@@ -46,7 +46,7 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 });
 
 // login
-router.post("/login", validInfo, async (req, res) => {
+router.post('/login', validInfo, async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
@@ -73,7 +73,7 @@ router.post("/login", validInfo, async (req, res) => {
 		const token = await jwtGenerator(user.rows[0].user_id);
 
 		// 把token與部分用戶資料送回APP
-		res.json({ token, "user":{"name": `${user.rows[0].user_name}`, "corporation": `${user.rows[0].user_corporation}`, "email": `${user.rows[0].user_email}`, "permission": `${user.rows[0].user_permission}`}});
+		res.json({ token, "user":{"name": `${user.rows[0].user_name}`, "corporation": `${user.rows[0].user_corporation}`, "email": `${user.rows[0].user_email}`}});
 		
 	} catch (err) {
 		console.log(err.message);
@@ -81,6 +81,7 @@ router.post("/login", validInfo, async (req, res) => {
 	}
 });
 
+// 目前專案尚未用到
 router.get("/is-verify", authorization, async (req, res) => {
 	try {
 
