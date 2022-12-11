@@ -36,7 +36,7 @@ router.post("/register", validInfo, async(req, res) => {	// validInfo to verify 
 		// 產生jwt
 		const token = jwtGenerator(newUser.rows[0].user_id);
 
-		// 把token與部分用戶資料送回APP
+		// 把token與用戶資料送回APP
 		res.json({ token, "user":{"name": `${name}`, "corporation": `${corporation}`, "email": `${email}`, "permission": `${permission}` }});
 
 	} catch (err) {

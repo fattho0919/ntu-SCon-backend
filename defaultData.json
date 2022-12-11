@@ -44,5 +44,16 @@
       "password": "123",
       "permission": "專案使用者"
     }
+  ],
+
+  "projects": [
+    {
+      "name": "人文大樓",
+      "address": "臺北市大安區新生南路",
+      "corporation": "瑞助",
+      "manager": "林沛忻",
+      "inspector": "陳冠錞",
+      "email": "peishin0715@gmail.com"
+    }
   ]
 }
