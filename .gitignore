@@ -3,3 +3,6 @@
 
 # Dotenv environment variables file
 .env
+
+# Key of GCE
+objectdetection*
