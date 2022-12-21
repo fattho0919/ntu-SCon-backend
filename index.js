@@ -17,6 +17,8 @@ app.use('/projects', require('./routes/projects'));
 
 app.use('/users', require('./routes/users'));
 
+app.use('/manage', require('./routes/manage'));
+
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
 });

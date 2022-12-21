@@ -55,7 +55,7 @@ router.get('/corporation', authorization, async(req, res) => {
 
   //與前端確認request body內容
   let corporation = req.body.corporation;
-  
+
   try {        
 
     const subProjects = await pool.query('SELECT * FROM projects WHERE project_corporation = $1', [
@@ -73,5 +73,25 @@ router.get('/corporation', authorization, async(req, res) => {
   }
 });
 
+// 專案使用者:使用者資訊頁面/專案清單(所屬專案)
+router.get('/work', authorization, async (req, res) => {
+  // 前端要帶入uuid，登入時也該回傳uuid到App端但不須顯示
+  let user_id = req.body.uuid;
+  let user_name = req.body.name;
+
+  try {
+    
+    const project_id = await pool.query('SELECT project_id FROM worksOn WHERE user_id = $1', [
+      user_id
+    ]);
+
+    const projects = await pool.query('SELECT * FROM projects WHERE projects_id IN ')
+
+  } catch (error) {
+    
+    console.log(`get projects for ${user_name} error: ${error}`);
+
+  }
+});
 
 module.exports = router;

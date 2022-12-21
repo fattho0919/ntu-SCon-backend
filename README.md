@@ -3,14 +3,14 @@
 - 主要功能:用戶管理、專案與議題存取、資料儲存
 - 狀態:開發中
 
-## Develop
+## Development
 ### Pre-request
 - Make sure you have `node` environment `v.16` or later.
 - Make sure you have install `postgresql` `v.14` or later.
 ### Install
-- `npm install` to install required dependency.
+- `npm install` to install all required dependencies (according to `package.json`).
 - `npm start` to start the server.
 
-## Deploy
+## Deployment
 - Not available
 - Will add Dockerfile in future

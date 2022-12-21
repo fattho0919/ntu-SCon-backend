@@ -3,7 +3,7 @@ const pool = require('../db');
 const bcrypt = require('bcrypt');
 const jwtGenerator = require('../utils/jwtGenerator');
 const validInfo = require("../middleware/validInfo");	// 確認信箱格式、必填資訊是否存在
-const authorization = require("../middleware/authorization");	// 
+const authorization = require("../middleware/authorization");	// 確認用戶是否擁有token
 
 // register
 router.post('/register', validInfo, async(req, res) => {	// validInfo to verify the email and password
@@ -27,7 +27,7 @@ router.post('/register', validInfo, async(req, res) => {	// validInfo to verify 
 		
 		// 用戶註冊資料存入資料庫
 		const newUser = await pool.query(
-			"INSERT INTO users (user_name, user_corporation, user_email, user_password, user_permission) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+			"INSERT INTO users (user_name, user_corporation, user_email, user_password) VALUES ($1, $2, $3, $4) RETURNING *",
 			[name, corporation, email, bcryptPassword]
 		);
 
