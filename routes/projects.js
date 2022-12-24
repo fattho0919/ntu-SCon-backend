@@ -34,10 +34,10 @@ router.post('/', authorization, async(req, res) => {
 });
 
 // 管理員:使用者資訊頁面/專案清單
-router.get('/all', authorization, async(req, res) => {
+router.get('/all'/*, authorization*/, async(req, res) => {
   try {
-    
-    const allProjects = await pool.query('SELECT * FROM projects');
+    console.log(req.body);
+    const allProjects = await pool.query('SELECT * FROM projects ORDER BY project_corporation');
 
     res.json(allProjects);  // 暫時將所有欄位回傳
 
@@ -51,10 +51,11 @@ router.get('/all', authorization, async(req, res) => {
 });
 
 // 專案管理員:使用者資訊頁面/專案清單(特定公司)
-router.get('/corporation', authorization, async(req, res) => {
+router.get('/:corporation'/*, authorization*/, async(req, res) => {
 
   //與前端確認request body內容
-  let corporation = req.body.corporation;
+  let corporation = req.params.corporation;
+  console.log(corporation);
 
   try {        
 
