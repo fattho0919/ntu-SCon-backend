@@ -13,9 +13,11 @@ app.use('/auth', require('./routes/jwtAuth'));
 
 app.use('/dashboard', require('./routes/dashboard'));
 
+app.use('/users', require('./routes/users'));
+
 app.use('/projects', require('./routes/projects'));
 
-app.use('/users', require('./routes/users'));
+app.use('/issues', require('./routes/issues'));
 
 app.use('/manage', require('./routes/manage'));
 
