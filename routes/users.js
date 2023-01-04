@@ -4,10 +4,10 @@ const pool = require('../db');
 const authorization = require('../middleware/authorization');
 
 // 管理員:使用者資訊頁面/專案清單/使用者清單顯示
-router.get('/users/all', authorization, async(req, res) => {
+router.get('/all'/*, authorization*/, async(req, res) => {
   try {
-
-    const allUsers = await pool.query('SELECT * FROM users');
+    console.log(req.body);
+    const allUsers = await pool.query('SELECT * FROM users ORDER BY user_corporation');
 
     res.json(allUsers);  // 在前或後端做sort?
 
@@ -19,9 +19,10 @@ router.get('/users/all', authorization, async(req, res) => {
 });
 
 // 專案管理員:使用者資訊頁面/專案清單/(該公司)使用者清單顯示
-router.get('/users/:corporation', authorization, async(req, res) => {
+router.get('/:corporation'/*, authorization*/, async(req, res) => {
   // 在前端帶入使用者身分與公司，包進request
-  let corporation = req.corporation;
+  let corporation = req.params.corporation;
+  console.log(corporation);
   
   try {
     
@@ -38,4 +39,4 @@ router.get('/users/:corporation', authorization, async(req, res) => {
   }
 });
 
-module.exports = Router;
+module.exports = router;
