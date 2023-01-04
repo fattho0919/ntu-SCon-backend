@@ -31,7 +31,7 @@ CREATE TABLE projects(
   project_manager VARCHAR(255) NOT NULL,
   project_inspector VARCHAR(255) NOT NULL,
   project_email VARCHAR(255) NOT NULL,
-  user_id VARCHAR(255),
+  -- user_id VARCHAR(255),
   createAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updateAt TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -44,12 +44,26 @@ CREATE TABLE issuesOn (
 );
 
 
--- Issues
+-- Issues: 議題
 CREATE TABLE issues (
-  issue_id SERIAL PRIMARY KEY,
-  tracking_or_not BOOLEAN NOT NULL,
-  issue_location TEXT NOT NULL,
-  issue_activity TEXT NOT NULL, -- 缺失
+  issue_id SERIAL PRIMARY KEY,  -- 缺失ID
+  issue_violation_type TEXT NOT NULL, -- 缺失類別
+  issue_type TEXT NOT NULL, -- 缺失項目
+  tracking_or_not BOOLEAN NOT NULL, -- 追蹤缺失
+  issue_location TEXT NOT NULL, -- 缺失地點
+  issue_responsible_corporation TEXT NOT NULL, -- 責任廠商
+  -- issue_task TEXT, -- 工項(選填)
+  issue_assignee TEXT NOT NULL, -- 記錄人員(自動帶入App使用者名稱)
+  issue_status TEXT NOT NULL, -- issue狀態
+  createAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updateAt TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  -- 缺失改善照片/議題照片 
+);
+
+-- Tasks: 工項
+CREATE TABLE tasks (
+  task_id SERIAL PRIMARY KEY,
+
 );
 
 -- insert fake user
