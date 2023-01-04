@@ -4,7 +4,7 @@ const pool = require('../db');
 const authorization = require('../middleware/authorization');
 
 // 新增issue
-router.post('/', authorization, async(req, res) => {
+router.post('/', /*authorization,*/ async(req, res) => {
   try {
     console.log(req.body);
     const {
@@ -16,6 +16,8 @@ router.post('/', authorization, async(req, res) => {
       issueAssignee,
       issueStatus
     } = req.body;
+
+    console.log(issueViolationType);
 
     const newIssue = await pool.query(
       `INSERT INTO issues (
@@ -38,7 +40,6 @@ router.post('/', authorization, async(req, res) => {
       ]
     );
 
-    res.json(newIssue);
     res.json(`Insert successfully`);
 
   } catch (error) {
@@ -48,4 +49,4 @@ router.post('/', authorization, async(req, res) => {
 
 // 依使用者資訊
 
-module.exports = Router;
+module.exports = router;

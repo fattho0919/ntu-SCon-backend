@@ -4,7 +4,7 @@ const pool = require('../db');
 const authorization = require('../middleware/authorization');
 
 // 專案管理員:新增專案用
-router.post('/', authorization, async(req, res) => {
+router.post('/add', /*authorization,*/ async(req, res) => {
   try {
     console.log(req.body);
     const { name, address, corporation, manager, inspector, email } = req.body;
@@ -96,4 +96,4 @@ router.get('/work', authorization, async (req, res) => {
   }
 });
 
-module.exports = Router;
+module.exports = router;

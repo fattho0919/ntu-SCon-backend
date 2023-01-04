@@ -26,4 +26,4 @@ router.put('/permission', /*authorization,*/ async(req, res) => {
   }
 });
 
-module.exports = Router;
+module.exports = router;
