@@ -73,7 +73,7 @@ router.post('/login', validInfo, async (req, res) => {
 		const token = await jwtGenerator(user.rows[0].user_id);
 
 		// 把token與部分用戶資料送回APP
-		res.json({ token, "user":{"name": `${user.rows[0].user_name}`, "corporation": `${user.rows[0].user_corporation}`, "email": `${user.rows[0].user_email}`}});
+		res.json({ token, "user":{"name": `${user.rows[0].user_name}`, "corporation": `${user.rows[0].user_corporation}`, "email": `${user.rows[0].user_email}`, "permission": `${user.rows[0].user_permission}`}});
 		
 	} catch (err) {
 		console.log(err.message);

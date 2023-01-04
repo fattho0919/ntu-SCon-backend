@@ -8,16 +8,16 @@ router.post('/', /*authorization,*/ async(req, res) => {
   try {
     console.log(req.body);
     const {
-      issueViolationType,
+      violationType,
       issueType,
-      issueTrackingOrNot,
-      issueLocation,
-      issueResponsibleCorporation,
-      issueAssignee,
-      issueStatus
+      issueTrack,
+      issueLocationText,
+      responsibleCorporation,
+      issueAssigneeText,
+      issueStatus,
     } = req.body;
 
-    console.log(issueViolationType);
+    console.log(violationType);
 
     const newIssue = await pool.query(
       `INSERT INTO issues (
@@ -30,16 +30,17 @@ router.post('/', /*authorization,*/ async(req, res) => {
         issue_status
       ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
-        issueViolationType,
+        violationType,
         issueType,
-        issueTrackingOrNot,
-        issueLocation,
-        issueResponsibleCorporation,
-        issueAssignee,
-        issueStatus
+        issueTrack,
+        issueLocationText,
+        responsibleCorporation,
+        issueAssigneeText,
+        issueStatus,
       ]
     );
 
+    // console.log(newIssue);
     res.json(`Insert successfully`);
 
   } catch (error) {

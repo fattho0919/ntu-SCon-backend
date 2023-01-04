@@ -4,10 +4,17 @@ const pool = require('../db');
 const authorization = require('../middleware/authorization');
 
 // 專案管理員:新增專案用
-router.post('/add', /*authorization,*/ async(req, res) => {
+router.post('/', /*authorization,*/ async(req, res) => {
   try {
     console.log(req.body);
-    const { name, address, corporation, manager, inspector, email } = req.body;
+    const { name, address, company, manager, inspector, email } = req.body;
+
+    console.log(name);
+    console.log(address);
+    console.log(company);
+    console.log(manager);
+    console.log(inspector);
+    console.log(email);
 
     // 從資料庫中找同名專案(專案名稱是否應具唯一性?)
     /* 
@@ -19,8 +26,17 @@ router.post('/add', /*authorization,*/ async(req, res) => {
     */
 
     const newProject = await pool.query(
-      "INSERT INTO projects (project_name, project_address, project_corporation, project_manager, project_inspector, project_email) VALUES ($1, $2, $3, $4, $5, $6)",
-      [ name, address, corporation, manager, inspector, email ]
+      `INSERT INTO projects (
+        project_name,
+        project_address,
+        project_corporation,
+        project_manager,
+        project_inspector,
+        project_email
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6
+      )`,
+      [ name, address, company, manager, inspector, email ]
     );
 
     // 這邊應該要設計資料庫查詢的語法(比較複雜的、關聯table的)
