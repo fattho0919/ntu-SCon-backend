@@ -25,4 +25,4 @@ module.exports = async (req, res, next) => {  // next can keep going to the rout
     console.error(error.message);
     return res.status(403).json("您尚未取得授權");
   }
-}
+};

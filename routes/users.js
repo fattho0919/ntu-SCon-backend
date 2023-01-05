@@ -9,6 +9,7 @@ router.get('/all'/*, authorization*/, async(req, res) => {
     console.log(req.body);
     const allUsers = await pool.query('SELECT * FROM users ORDER BY user_corporation');
 
+    console.log(allUsers.rows);
     res.json(allUsers);  // 在前或後端做sort?
 
   } catch (error) {
