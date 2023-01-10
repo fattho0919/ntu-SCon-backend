@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Router, json } = require('express');
-const pool = require('../db');
+const pool = require('../services/pool');
 const authorization = require('../middleware/authorization');
 
 // 新增issue

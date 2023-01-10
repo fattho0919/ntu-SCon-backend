@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const pool = require('../db');
-const jwtr = require('../jwtr');
+const pool = require('../services/pool');
+const jwtr = require('../services/jwtr');
 const bcrypt = require('bcrypt');
 const jwtGenerator = require('../utils/jwtGenerator');
 const validation = require("../middleware/validation");	// 確認信箱格式、必填資訊是否存在

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Router } = require('express');
-const pool = require('../db');
+const pool = require('../services/pool');
 const authorization = require('../middleware/authorization');
 
 // 管理員:使用者資訊頁面/專案清單/使用者清單顯示

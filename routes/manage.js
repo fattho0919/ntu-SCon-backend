@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Router } = require('express');
-const pool = require('../db');
+const pool = require('../services/pool');
 const authorization = require('../middleware/authorization');
 
 router.put('/permission', /*authorization,*/ async(req, res) => {
