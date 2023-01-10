@@ -17,7 +17,7 @@
       "permission": "管理員"
     },
     {
-      "name": "陳冠錞",
+      "name": "Cody",
       "corporation": "臺大BIM中心",
       "email": "cdxvy30@caece.net",
       "password": "123",
@@ -31,18 +31,18 @@
       "permission": "專案管理員"
     },
     {
-      "name": "林沛忻",
-      "corporation": "瑞助",
-      "email": "peihsin0715@gmail.com",
-      "password": "123",
-      "permission": "專案管理員"
-    },
-    {
       "name": "何宏發",
       "corporation": "豐譽",
       "email": "wangfatho@gmail.com",
       "password": "123",
       "permission": "專案使用者"
+    },
+    {
+      "name": "林沛忻",
+      "corporation": "瑞助",
+      "email": "peihsin0715@gmail.com",
+      "password": "123",
+      "permission": "專案管理員"
     },
     {
       "name": "陳冠錞",
