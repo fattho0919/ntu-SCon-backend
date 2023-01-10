@@ -66,5 +66,11 @@ CREATE TABLE tasks (
 
 );
 
--- insert fake user
-INSERT INTO users (user_name, user_email, user_password, user_corporation) VALUES ('cdxvy30', 'cdxvy30@gmail.com', '12345678', 'Archi');
+-- insert default user
+INSERT INTO users (
+  user_name,
+  user_corporation,
+  user_email,
+  user_password,
+  user_permission
+) VALUES ('林之謙', 'jacoblin@ntu.edu.tw', '123', '臺大BIM中心', '管理員');
