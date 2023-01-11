@@ -46,7 +46,8 @@ router.post('/register', validation, async (req, res) => {	// validInfo to verif
 				"name": `${newUser.rows[0].user_name}`,
 				"corporation": `${newUser.rows[0].user_corporation}`,
 				"email": `${newUser.rows[0].user_email}`,
-				"permission": '訪客'	//	註冊後預設為訪客(管理員直接透過資料庫新增)
+				"permission": '訪客',	//	註冊後預設為訪客(管理員直接透過資料庫新增)
+				"job": '訪客'
 			}
 		});
 
@@ -87,7 +88,8 @@ router.post('/login', validation, async (req, res) => {
 				"name": `${user.rows[0].user_name}`,
 				"corporation": `${user.rows[0].user_corporation}`,
 				"email": `${user.rows[0].user_email}`,
-				"permission": `${user.rows[0].user_permission}`
+				"permission": `${user.rows[0].user_permission}`,
+				"job": `${user.rows[0].user_job}`
 			}
 		});
 
@@ -100,8 +102,9 @@ router.post('/login', validation, async (req, res) => {
 
 // logout
 router.post('/logout', authorization, async (req, res) => {
+	console.log(req.body);
 	try {
-		const user_id = req.body.user_uuid;
+		const user_id = req.body.uuid;
 
 		const payload = {
 			jti: user_id,

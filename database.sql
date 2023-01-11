@@ -11,6 +11,7 @@ CREATE TABLE users(
   user_email VARCHAR(255) NOT NULL,
   user_password VARCHAR(255) NOT NULL,
   user_permission VARCHAR(255), -- 由管理員分配，不須有初始值
+  user_job VARCHAR(255), -- 由管理員分配，不須有初始值
   createAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updateAt TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -31,7 +32,6 @@ CREATE TABLE projects(
   project_manager VARCHAR(255) NOT NULL,
   project_inspector VARCHAR(255) NOT NULL,
   project_email VARCHAR(255) NOT NULL,
-  -- user_id VARCHAR(255),
   createAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updateAt TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -66,11 +66,35 @@ CREATE TABLE tasks (
 
 );
 
--- insert default user
+-- Update
+UPDATE users SET user_permission = '管理員';
+UPDATE users SET user_job = '教授' WHERE user_name != 'Cody Chen';
+UPDATE users SET user_job = '開發人員' WHERE user_name = 'Cody Chen'
+
+-- insert default user : 無法通過密碼加密路徑
+INSERT INTO users (
+  user_corporation,
+  user_name,
+  user_email,
+  user_password,
+  user_permission,
+  user_job
+) VALUES ('臺大BIM中心', '林之謙', 'jacoblin@ntu.edu.tw', '123', '管理員', '教授');
+
+INSERT INTO users (
+  user_corporation,
+  user_name,
+  user_email,
+  user_password,
+  user_permission,
+  user_job
+) VALUES ('臺大BIM中心', '謝尚賢', 'sshsieh@gmail.com', '123', '管理員', '教授');
+
 INSERT INTO users (
   user_name,
   user_corporation,
   user_email,
   user_password,
-  user_permission
-) VALUES ('林之謙', 'jacoblin@ntu.edu.tw', '123', '臺大BIM中心', '管理員');
+  user_permission,
+  user_job
+) VALUES ('臺大BIM中心', 'Cody Chen', 'cdxvy30@caece.net', '123', '管理員', '開發人員');
