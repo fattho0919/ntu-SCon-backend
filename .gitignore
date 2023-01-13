@@ -6,3 +6,6 @@
 
 # Key of GCE
 objectdetection*
+
+# Images file
+/images

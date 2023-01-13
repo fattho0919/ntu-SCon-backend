@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { propfind } = require('./routes/jwtAuth');
+const morgan = require('morgan');
 const PORT = 3000;
 
 // middleware
 app.use(express.json());
 app.use(cors());
+app.use(morgan('dev'));																	//	HTTP請求logger
 
 // register and login
 app.use('/auth', require('./routes/jwtAuth'));

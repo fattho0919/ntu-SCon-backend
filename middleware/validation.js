@@ -9,25 +9,24 @@ module.exports = (req, res, next) => {
   if (req.path === "/register") {
     if (![name, corporation, email, password].every(Boolean)) {
       
-      return res.status(401).json("註冊:缺少憑證");
+      return res.status(401).send('註冊:缺少必要資訊');
 
     } else if (!validEmail(email)) {
       
-      return res.status(401).json("註冊:信箱格式不合法");
+      return res.status(401).send('註冊:信箱格式不合法');
 
     }
   } else if (req.path === "/login") {
     if (![email, password].every(Boolean)) {
       
-      return res.status(401).json("登入:缺少憑證");
+      return res.status(401).send('登入:缺少必要資訊');
 
     } else if (!validEmail(email)) {
       
-      return res.status(401).json("登入:信箱格式錯誤");
+      return res.status(401).send('登入:信箱格式錯誤');
 
     }
   }
-
   // 呼叫中介軟體的下個函式
   next(); 
 };

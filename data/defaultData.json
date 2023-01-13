@@ -1,83 +1,52 @@
-// 開發階段常需重新建構schema，用預設資料的方式填入
-// 也可用sql file的方式，看當下需要哪種測試方式
 {
-  "register": [
+  "users": [
     {
       "name": "林之謙",
       "corporation": "臺大BIM中心",
       "email": "jacoblin@ntu.edu.tw",
       "password": "123",
-      "permission": "管理員"
+      "permission": "管理員",
+      "job": "教授"
     },
     {
       "name": "謝尚賢",
       "corporation": "臺大BIM中心",
       "email": "sshsieh@gmail.com",
       "password": "123",
-      "permission": "管理員"
+      "permission": "管理員",
+      "job": "教授"
     },
     {
       "name": "Cody Chen",
       "corporation": "臺大BIM中心",
       "email": "cdxvy30@caece.net",
       "password": "123",
-      "permission": "管理員"
+      "permission": "管理員",
+      "job": "開發人員"
     },
     {
       "name": "蔡瑋倫",
-      "corporation": "豐譽",
+      "corporation": "臺大BIM中心",
       "email": "william041107@gmail.com",
       "password": "123",
-      "permission": "專案管理員"
+      "permission": "管理員",
+      "job": "開發人員"
     },
     {
       "name": "何宏發",
-      "corporation": "豐譽",
-      "email": "wangfatho@gmail.com",
+      "corporation": "臺大BIM中心",
+      "email": "wangfatho@caece.net",
       "password": "123",
-      "permission": "專案使用者"
+      "permission": "管理員",
+      "job": "開發人員"
     },
     {
       "name": "林沛忻",
-      "corporation": "瑞助",
+      "corporation": "臺大BIM中心",
       "email": "peihsin0715@gmail.com",
       "password": "123",
-      "permission": "專案管理員"
-    },
-    {
-      "name": "陳冠錞",
-      "corporation": "瑞助",
-      "email": "cdxvy30@gmail.com",
-      "password": "123",
-      "permission": "專案使用者"
-    }
-  ],
-
-  "projects": [
-    {
-      "name": "人文大樓",
-      "address": "臺北市大安區新生南路三段",
-      "corporation": "豐譽",
-      "manager": "蔡瑋倫",
-      "inspector": "何宏發",
-      "email": "william041107@gmail.com"
-    },
-    {
-      "name": "中和社宅",
-      "address": "新北市中和區景平路127號",
-      "corporation": "瑞助",
-      "manager": "林沛忻",
-      "inspector": "陳冠錞",
-      "email": "peishin0715@gmail.com"
-    }
-  ],
-
-  "issues": [
-    {
-
-    },
-    {
-
+      "permission": "管理員",
+      "job": "開發人員"
     }
   ]
 }
