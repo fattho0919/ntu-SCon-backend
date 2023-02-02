@@ -31,11 +31,13 @@ router.post('/register', validation, async (req, res) => {
 				user_name,
 				user_corporation,
 				user_email,
-				user_password
+				user_password,
+				user_permission,
+				user_job
 			) VALUES (
-				$1, $2, $3, $4
+				$1, $2, $3, $4, $5, $6
 			) RETURNING *`,
-			[name, corporation, email, bcryptPassword]
+			[name, corporation, email, bcryptPassword, '訪客', '無']
 		);
 
 		const token = await jwtGenerator(newUser.rows[0].user_id);
@@ -47,8 +49,8 @@ router.post('/register', validation, async (req, res) => {
 				"name": `${newUser.rows[0].user_name}`,
 				"corporation": `${newUser.rows[0].user_corporation}`,
 				"email": `${newUser.rows[0].user_email}`,
-				"permission": '訪客',																		//	註冊後預設為訪客(管理員直接透過資料庫新增)
-				"job": '訪客'
+				"permission": `${newUser.rows[0].user_permission}`,																		//	註冊後預設為訪客(管理員直接透過資料庫新增)
+				"job": `${newUser.rows[0].user_job}`
 			}
 		});
 
@@ -64,9 +66,8 @@ router.post('/login', validation, async (req, res) => {
 
 		const user = await pool.query(
 			`SELECT *
-			FROM users
-			WHERE user_email = $1`
-			, [
+			 FROM users
+			 WHERE user_email = $1`, [
 				email
 			]);
 
@@ -102,7 +103,7 @@ router.post('/login', validation, async (req, res) => {
 	}
 });
 
-router.post('/logout', authorization, async (req, res) => {
+router.post('/logout', async (req, res) => {
 	// 開發階段測試
 	console.log(req.body);
 	try {

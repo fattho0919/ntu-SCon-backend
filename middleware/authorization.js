@@ -18,6 +18,6 @@ module.exports = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error.message);
-    return res.status(403).send('您尚未取得授權');
+    return res.status(403).json('您尚未取得授權');
   }
 };

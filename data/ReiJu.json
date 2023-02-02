@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "name": "徐美玉",
+      "corporation": "瑞助營造股份有限公司",
+      "email": "rjAdminA@gmail.com",
+      "password": "123",
+      "permission": "公司負責人",
+      "job": "總經理"
+    }
+  ],
+  "projects": [
+    {
+      "name": "新北市中和區警消社會住宅統包工程",
+      "address": "新北市中和區景平路127號",
+      "corporation": "瑞助營造股份有限公司",
+      "manager": "徐美玉",
+      "inspector": "徐美玉",
+      "email": "rjAdminA@gmail.com"
+    },
+    {
+      
+    }
+  ]
+}

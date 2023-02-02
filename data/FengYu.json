@@ -1,0 +1,62 @@
+{
+  "users": [
+    {
+      "name": "陳仁崇",
+      "corporation": "豐譽營造股份有限公司",
+      "email": "fyAdminA@gmail.com",
+      "password": "123",
+      "permission": "公司負責人",
+      "job": "總經理"
+    },
+    {
+      "name": "陳彥佑",
+      "corporation": "豐譽營造股份有限公司",
+      "email": "fyAdminB@gmail.com",
+      "password": "123",
+      "permission": "公司負責人",
+      "job": "工務經理"
+    },
+    {
+      "name": "葉奕昌",
+      "corporation": "豐譽營造股份有限公司",
+      "email": "fyManagerA@gmail.com",
+      "password": "123",
+      "permission": "專案管理員",
+      "job": "專任工程人員"
+    },
+    {
+      "name": "陳畯暐",
+      "corporation": "豐譽營造股份有限公司",
+      "email": "fyManagerB@gmail.com",
+      "password": "123",
+      "permission": "專案管理員",
+      "job": "工地主任"
+    },
+    {
+      "name": "葉上群",
+      "corporation": "豐譽營造股份有限公司",
+      "email": "fyUserA@gmail.com",
+      "password": "123",
+      "permission": "專案使用者",
+      "job": "職業安全衛生管理員"
+    },
+    {
+      "name": "陳錡叡",
+      "corporation": "豐譽營造股份有限公司",
+      "email": "fyUserB@gmail.com",
+      "password": "123",
+      "permission": "專案使用者",
+      "job": "主辦工程師"
+    }
+  ],
+  "projects": [
+    {
+      "name": "國立台灣大學人文館",
+      "address": "臺北市大安區新生南路三段",
+      "corporation": "豐譽營造股份有限公司",
+      "manager": "陳仁崇",
+      "inspector": "陳仁崇",
+      "email": "fyAdminA@gmail.com"
+    }
+  ]
+}

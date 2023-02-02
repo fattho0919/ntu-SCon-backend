@@ -9,7 +9,6 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));																	//	HTTP請求logger
 
-// register and login
 app.use('/auth', require('./routes/jwtAuth'));
 
 app.use('/dashboard', require('./routes/dashboard'));
@@ -20,7 +19,13 @@ app.use('/projects', require('./routes/projects'));
 
 app.use('/issues', require('./routes/issues'));
 
-app.use('/manage', require('./routes/manage'));
+app.use('/locations', require('./routes/locations'));
+
+app.use('/tasks', require('./routes/tasks'));
+
+app.use('/permissions', require('./routes/permissions'));
+
+app.use('/worksOn', require('./routes/worksOn'));
 
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
