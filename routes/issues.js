@@ -9,11 +9,13 @@ const storage = multer.diskStorage({
     callback(null, './images/');
   },
   filename: function (req, file, callback) {
-    let corporationName = JSON.parse(req.body.metadata).corporation;
-    let projectName = JSON.parse(req.body.metadata).name;
+    console.log(JSON.parse(req.body.metadata));
+    let corporationName = JSON.parse(req.body.metadata).projectCorporation;
+    let projectName = JSON.parse(req.body.metadata).projectName;
+    let d = new Date(Date.now() + 28800000).toISOString();
     callback(
       null,
-      corporationName + '_' + projectName + '_' + 'issue' + '_' + Date.now() + '.jpg'
+      corporationName + '_' + projectName + '_' + 'issue' + '_' + d + '.jpg'
     );
   }
 })

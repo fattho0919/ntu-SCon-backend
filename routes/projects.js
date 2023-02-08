@@ -57,7 +57,7 @@ router.post('/add', upload.single('project_thumbnail'), async(req, res) => {
   }
 });
 
-router.get('/list/all', authorization, async(req, res) => {
+router.get('/list/all', async(req, res) => {
   console.log(req.headers);
   try {
     console.log(req.body);
@@ -191,21 +191,35 @@ router.get('/:corporation', authorization, async(req, res) => {
 
 
 // 專案使用者:使用者資訊頁面/專案清單(所屬專案)
-router.get('/worksOn/:id', authorization, async (req, res) => {
-  let user_id = req.body.uuid;
+router.get('/works_on/:userId', async (req, res) => {
   let user_name = req.body.name;
   try {
+    // let user_id = req.body.uuid;
+    let userId = req.params.userId;
     
     const project_id = await pool.query(
       `SELECT project_id
        FROM works_on
        WHERE user_id = $1`, [
-      user_id
+      userId
     ]);
 
-    // const projects = await pool.query('SELECT * FROM projects WHERE projects_id IN ');
+    let selected_project_id = project_id.rows[0].project_id;
+    console.log(selected_project_id);
+
+    const selected_project = await pool.query(
+      `SELECT *
+       FROM projects
+       WHERE project_id = $1`, [
+        selected_project_id
+      ]
+    );
+    
+    console.log(selected_project.rows);
+    res.json(selected_project.rows);
+
   } catch (error) {
-    console.log(`get projects for ${user_name} error: ${error}`);
+    console.log(`Get projects for ${user_name} error: ${error}`);
   }
 });
 

@@ -8,6 +8,8 @@ router.post('/:userId/:projectId', async (req, res) => {
     let userId = req.params.userId;
     let projectId = req.params.projectId;
 
+    // 需事先檢查table內有沒有既有的bind關聯
+
     const works_on = await pool.query(
       `INSERT INTO works_on (
         user_id,
