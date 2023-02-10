@@ -97,7 +97,7 @@ router.get('/get/thumbnail/:id', async (req, res) => {
     res.sendFile(path, {root: '.'});
 
   } catch (error) {
-    
+    console.log();
   }
 })
 

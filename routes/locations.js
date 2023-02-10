@@ -24,4 +24,26 @@ router.post('/add', async (req, res) => {
   }
 });
 
+router.get('/list/:projectId', async (req, res) => {
+  try {
+    console.log(req.params);
+    const projectId = req.params.projectId;
+    console.log(projectId);
+
+    const issueLocations = await pool.query(
+      `SELECT *
+       FROM locations
+       WHERE project_id = $1`, [
+        projectId
+      ]
+    );
+
+    console.log(issueLocations.rows);
+    res.json(issueLocations.rows);
+
+  } catch (error) {
+    console.log(`get locations error: ${error}`);
+  }
+});
+
 module.exports = router;

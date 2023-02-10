@@ -1,4 +1,3 @@
-CREATE DATABASE pernjwt;
 CREATE DATABASE smartconstruction;
 
 -- set extension
@@ -73,59 +72,52 @@ CREATE TABLE tasks (
   project_id uuid REFERENCES projects (project_id)
 );
 
--- 7. 議題實體
+-- 7. 缺失實體
 CREATE TABLE issues (
   issue_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),   -- 缺失ID
   issue_image_path TEXT,                                  -- 可能會有空值
+  issue_x BIGINT,
+  issue_y BIGINT,
   issue_title TEXT,                                       -- 缺失類別
   issue_type TEXT,                                        -- 缺失項目
   tracking_or_not BOOLEAN,                                -- 追蹤缺失
   issue_location TEXT,                                    -- 缺失地點
   issue_manufacturer TEXT,                                -- 責任廠商
   issue_task TEXT,                                        -- 工項類別(選填)
-  issue_assignee TEXT,                           -- 記錄人員(自動帶入App使用者名稱)
+  issue_assignee TEXT,                                    -- 記錄人員(自動帶入App使用者名稱)
   issue_status TEXT,                                      -- 缺失狀態
+  issue_typeRemark TEXT,                                  -- 若缺失類別為"其他""，可自行輸入
   createAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updateAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  project_id uuid REFERENCES projects (project_id)       -- 
+  project_id uuid REFERENCES projects (project_id),       -- 
+  location_id uuid REFERENCES locations (location_id)
 );
 
--- 8. 責任歸屬實體
+-- 8. 缺失類別實體(靜態)
+CREATE TABLE violation_type (
+
+);
+
+-- 9. 標註實體
+CREATE TABLE labels (
+  label_id PRIMARY KEY DEFAULT uuid_generate_v4(),
+  issue_id uuid REFERENCES issues (issue_id),
+  max_x BIGINT,
+  max_y BIGINT,
+  min_x BIGINT,
+  min_y BIGINT,
+  createAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updateAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+);
+
+-- 10. 責任歸屬實體
 CREATE TABLE responsible_for (
   responsible_for_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   corporation_id uuid REFERENCES corporations (corporation_id),
   task_id uuid REFERENCES tasks (task_id)
 );
 
--- Update
+-- Update 使用者權限
 UPDATE users SET user_permission = '管理員';
 UPDATE users SET user_job = '教授' WHERE user_name != 'Cody Chen';
 UPDATE users SET user_job = '開發人員' WHERE user_name = 'Cody Chen';
-
--- insert default user : 無法通過密碼加密路徑
-INSERT INTO users (
-  user_corporation,
-  user_name,
-  user_email,
-  user_password,
-  user_permission,
-  user_job
-) VALUES ('臺大BIM中心', '林之謙', 'jacoblin@ntu.edu.tw', '123', '管理員', '教授');
-
-INSERT INTO users (
-  user_corporation,
-  user_name,
-  user_email,
-  user_password,
-  user_permission,
-  user_job
-) VALUES ('臺大BIM中心', '謝尚賢', 'sshsieh@gmail.com', '123', '管理員', '教授');
-
-INSERT INTO users (
-  user_name,
-  user_corporation,
-  user_email,
-  user_password,
-  user_permission,
-  user_job
-) VALUES ('臺大BIM中心', 'Cody Chen', 'cdxvy30@caece.net', '123', '管理員', '開發人員');

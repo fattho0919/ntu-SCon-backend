@@ -27,6 +27,8 @@ app.use('/permissions', require('./routes/permissions'));
 
 app.use('/worksOn', require('./routes/worksOn'));
 
+app.use('/corporations', require('./routes/corporations'));
+
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
 });
