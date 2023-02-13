@@ -3,8 +3,8 @@ const pool = require('../services/pool');
 const authorization = require('../middleware/authorization');
 
 router.get('/:projectId', async (req, res) => {
+  let projectId = req.params.projectId;
   try {
-    let projectId = req.params.projectId;
 
     const corporationList = await pool.query(
       `SELECT *
@@ -13,14 +13,13 @@ router.get('/:projectId', async (req, res) => {
         projectId
       ]
     );
-    
 
+    res.json(corporationList.rows);
 
   } catch (error) {
     console.log(`get corporation list from ${projectId} error: ${error}`);
     res.status(500).json('伺服器錯誤');
   }
-})
-
+});
 
 module.exports = router;

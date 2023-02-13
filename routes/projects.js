@@ -23,10 +23,6 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.post('/add', upload.single('project_thumbnail'), async(req, res) => {
-  console.log('headers---------------');
-  console.log(req.headers);
-  console.log('bodys-----------------');
-  console.log(req.body);
   try {
     var meta_json = JSON.parse(req.body.metadata);
     console.log(meta_json);
@@ -45,7 +41,8 @@ router.post('/add', upload.single('project_thumbnail'), async(req, res) => {
       ) RETURNING *`,
       [ path, name, address, corporation ]
     );
-    console.log(newProject.rows[0]);
+
+    // console.log(newProject.rows[0]);
     res.json({
       path: newProject.rows[0].project_image_path,
       message: '新增專案成功'
@@ -117,7 +114,8 @@ router.get('/get/thumbnail/:id', async (req, res) => {
   }
 })
 
-router.put('/update/:id', async (req, res) => {
+// 更新專案資訊
+router.patch('/update/:id', async (req, res) => {
   try {
     
   } catch (error) {

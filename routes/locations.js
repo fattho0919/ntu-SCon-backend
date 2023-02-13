@@ -18,7 +18,6 @@ router.post('/add', async (req, res) => {
     );
     console.log(newLocation.rows);
 
-
   } catch (error) {
     console.log(error);
   }
@@ -38,7 +37,7 @@ router.get('/list/:projectId', async (req, res) => {
       ]
     );
 
-    console.log(issueLocations.rows);
+    // console.log(issueLocations.rows);
     res.json(issueLocations.rows);
 
   } catch (error) {
