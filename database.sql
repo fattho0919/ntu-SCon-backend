@@ -81,8 +81,7 @@ CREATE TABLE issues (
   issue_image_height BIGINT,                              -- 缺失影像高
   issue_title TEXT,                                       -- 缺失類別
   issue_type TEXT,                                        -- 缺失項目
-  issue_typeRemark TEXT,                                  -- 若缺失類別為"其他""，需自行輸入
-  issue_track BOOLEAN,                                -- 追蹤缺失
+  issue_track BOOLEAN,                                    -- 追蹤缺失
   issue_location TEXT,                                    -- 缺失地點
   issue_manufacturer TEXT,                                -- 責任廠商
   issue_task TEXT,                                        -- 工項類別(選填)

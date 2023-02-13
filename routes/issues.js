@@ -33,7 +33,7 @@ router.post('/add', upload.single('issue'), async(req, res) => {
       violationType,               // 缺失類別
       issueType,                // 缺失項目
       issueTrack,               // 追蹤缺失
-      issueLocation,            // 追蹤地點
+      issueLocationText,            // 追蹤地點
       issueManufacturer,        // 責任廠商
       issueTask,                // 工項
       issueRecorder,            // 紀錄者(App使用者)
@@ -66,7 +66,7 @@ router.post('/add', upload.single('issue'), async(req, res) => {
         violationType,
         issueType,
         issueTrack,
-        issueLocation,
+        issueLocationText,
         issueManufacturer,
         issueTask,
         issueRecorder,
@@ -118,7 +118,7 @@ router.patch('/update/:issueId', async (req, res) => {
       violationType,               // 缺失類別
       issueType,                // 缺失項目
       issueTrack,               // 追蹤缺失
-      issueLocation,        // 追蹤地點
+      issueLocationText,        // 追蹤地點
       responsibleCorporation,   // 責任廠商
       issueTask,            // 工項
       issueRecorder,            // 紀錄者(App使用者)
@@ -141,7 +141,7 @@ router.patch('/update/:issueId', async (req, res) => {
         violationType,            // 缺失類別
         issueType,                // 缺失項目
         issueTrack,               // 追蹤缺失
-        issueLocation,        // 追蹤地點
+        issueLocationText,        // 追蹤地點
         responsibleCorporation,   // 責任廠商
         issueTask,            // 工項
         issueRecorder,            // 紀錄者(App使用者)

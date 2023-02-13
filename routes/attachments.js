@@ -3,6 +3,7 @@ const pool = require('../services/pool');
 const authorization = require('../middleware/authorization');
 const multer = require('multer');
 
+// 備註(remark)要跟issue名稱綁定
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
     console.log(req.body);
