@@ -5,16 +5,18 @@ const authorization = require('../middleware/authorization');
 router.post('/add', async (req, res) => {
   try {
     console.log(req.body);
-    const { location, projectId } = req.body;
+    const { locationName, floor, position, projectId } = req.body;
 
     const newLocation = await pool.query(
       `INSERT INTO locations (
         location_name,
+        floor,
+        position,
         project_id
       ) VALUES (
-        $1, $2
+        $1, $2, $3, $4
       ) RETURNING *`,
-      [location, projectId]
+      [locationName, floor, position, projectId]
     );
     console.log(newLocation.rows);
 
