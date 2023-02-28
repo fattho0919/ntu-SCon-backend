@@ -12,6 +12,14 @@ CREATE TABLE corporations (
   -- corporation_phone TEXT
 );  -- 後兩者應獨立於使用者實體
 
+CREATE TABLE roles (
+  
+);
+
+CREATE TABLE permissions (
+
+);
+
 -- 2. 使用者實體
 CREATE TABLE users (
   user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -81,7 +89,7 @@ CREATE TABLE issues (
   issue_image_height BIGINT,                              -- 缺失影像高
   issue_title TEXT,                                       -- 缺失類別
   issue_type TEXT,                                        -- 缺失項目
-  issue_track BOOLEAN,                                    -- 追蹤缺失
+  tracking_or_not BOOLEAN,                                    -- 追蹤缺失
   issue_location TEXT,                                    -- 缺失地點
   issue_manufacturer TEXT,                                -- 責任廠商
   issue_task TEXT,                                        -- 工項類別(選填)
@@ -98,10 +106,10 @@ CREATE TABLE issues (
 CREATE TABLE labels (
   label_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   issue_id uuid REFERENCES issues (issue_id),
-  max_x BIGINT,
-  max_y BIGINT,
-  min_x BIGINT,
-  min_y BIGINT,
+  max_x FLOAT,
+  max_y FLOAT,
+  min_x FLOAT,
+  min_y FLOAT,
   label_name TEXT,
   label_mode TEXT,
   label_path TEXT,

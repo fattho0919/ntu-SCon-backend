@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 // 新增issue
-router.post('/add', upload.single('issue'), async(req, res) => {
+router.post('/add', upload.single('issue'), async (req, res) => {
   try {
     console.log(req.body);
     var meta_json = JSON.parse(req.body.metadata);
@@ -103,7 +103,7 @@ router.get('/get/thumbnail/:id', async (req, res) => {
     res.sendFile(path, {root: '.'});
 
   } catch (error) {
-    console.log();
+    console.log(`get thumbnail of issue`);
   }
 })
 

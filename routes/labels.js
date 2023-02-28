@@ -2,6 +2,26 @@ const router = require('express').Router();
 const pool = require('../services/pool');
 const authorization = require('../middleware/authorization');
 
+router.get('/list/:issueId', async (req, res) => {
+  try {
+    const issueId = req.params.issueId;
+
+    const labels = await pool.query(
+      `SELECT *
+       FROM labels
+       WHERE issue_id = $1`, [
+        issueId
+      ]
+    );
+
+    res.json(labels.rows);
+
+    // console.log(issueId);
+  } catch (error) {
+    console.log(`List labels error: ${error}`);
+  }
+});
+
 router.post('/add/:issueId', async (req, res) => {
   try {
     console.log(req.body);

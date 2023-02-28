@@ -15,7 +15,7 @@ router.post('/add', async (req, res) => {
         project_id
       ) VALUES (
         $1, $2, $3, $4
-      ) RETURNING *`,
+      ) RETURNING floor, position`,
       [locationName, floor, position, projectId]
     );
     console.log(newLocation.rows);
@@ -32,7 +32,7 @@ router.get('/list/:projectId', async (req, res) => {
     console.log(projectId);
 
     const issueLocations = await pool.query(
-      `SELECT *
+      `SELECT floor, position
        FROM locations
        WHERE project_id = $1`, [
         projectId
