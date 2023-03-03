@@ -89,7 +89,7 @@ CREATE TABLE issues (
   issue_image_height BIGINT,                              -- 缺失影像高
   issue_title TEXT,                                       -- 缺失類別
   issue_type TEXT,                                        -- 缺失項目
-  tracking_or_not BOOLEAN,                                    -- 追蹤缺失
+  tracking_or_not BOOLEAN,                                -- 追蹤缺失
   issue_location TEXT,                                    -- 缺失地點
   issue_manufacturer TEXT,                                -- 責任廠商
   issue_task TEXT,                                        -- 工項類別(選填)
@@ -97,7 +97,7 @@ CREATE TABLE issues (
   issue_status TEXT,                                      -- 缺失風險高低
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  project_id uuid REFERENCES projects (project_id),       -- 屬於哪個project
+  project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,       -- 屬於哪個project
   location_id uuid REFERENCES locations (location_id)     -- 在哪個地點
 );
 
@@ -120,7 +120,7 @@ CREATE TABLE labels (
 -- 9. 缺失改善影像與備註實體
 CREATE TABLE attachments (
   attachment_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  issue_id uuid REFERENCES issues (issue_id),
+  issue_id uuid REFERENCES issues (issue_id) ON DELETE CASCADE,
   attachment_image_path TEXT,
   attachment_remark TEXT,
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

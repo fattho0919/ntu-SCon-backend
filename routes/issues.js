@@ -90,7 +90,7 @@ router.get('/get/thumbnail/:id', async (req, res) => {
   try {
     const id = req.params.id;
 
-    const issue = await pool.query(
+    const issue_thumbnail = await pool.query(
       `SELECT issue_image_path
        FROM issues
        WHERE issue_id = $1`, [
@@ -98,14 +98,14 @@ router.get('/get/thumbnail/:id', async (req, res) => {
       ]
     );
 
-    console.log(issue.rows[0].issue_image_path);
-    const path = issue.rows[0].issue_image_path;
+    console.log(issue_thumbnail.rows[0].issue_image_path);
+    const path = issue_thumbnail.rows[0].issue_image_path;
     res.sendFile(path, {root: '.'});
 
   } catch (error) {
-    console.log(`get thumbnail of issue`);
+    res.status(500).json(`get thumbnail of issue error: `);
   }
-})
+});
 
 // 更新issue
 router.patch('/update/:issueId', async (req, res) => {
