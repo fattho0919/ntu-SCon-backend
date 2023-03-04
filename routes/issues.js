@@ -103,7 +103,7 @@ router.get('/get/thumbnail/:id', async (req, res) => {
     res.sendFile(path, {root: '.'});
 
   } catch (error) {
-    res.status(500).json(`get thumbnail of issue error: `);
+    res.status(500).json(`Get thumbnail of issue error: ${error}`);
   }
 });
 
