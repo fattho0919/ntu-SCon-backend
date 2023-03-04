@@ -27,12 +27,22 @@ router.post('/add', async (req, res) => {
   }
 });
 
+// router.get('/list/all', async (req, res) => {
+//   try {
+    
+    
+
+//   } catch (error) {
+    
+//   }
+// });
+
 router.get('/list/:projectId', async (req, res) => {
   let projectId = req.params.projectId;
   try {
 
     const corporationList = await pool.query(
-      `SELECT corporation_name
+      `SELECT *
        FROM corporations
        WHERE project_id = $1`, [
         projectId
