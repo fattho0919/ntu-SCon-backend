@@ -110,7 +110,7 @@ router.get('/get/thumbnail/:id', async (req, res) => {
 // 更新issue
 router.patch('/update/:issueId', async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const issue_id = req.params.issueId;
     // var update_data = JSON.parse(req.body);
     // console.log(update_data);

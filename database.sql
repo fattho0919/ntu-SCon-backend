@@ -3,8 +3,7 @@ CREATE DATABASE smartconstruction;
 -- set extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 公司實體
--- 甲方?
+-- 1. 公司(甲方)實體
 CREATE TABLE corporations (
   corporation_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   corporation_name TEXT,
@@ -22,10 +21,7 @@ CREATE TABLE permissions (
 
 );
 
--- 是否要把乙丙方分開
-CREATE TABLE corp_and_pro ();
-
--- 使用者實體
+-- 2. 使用者實體
 CREATE TABLE users (
   user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_name TEXT NOT NULL,
@@ -39,7 +35,7 @@ CREATE TABLE users (
   -- corporation_id uuid REFERENCES corporations (corporation_id)
 );
 
--- 專案實體
+-- 3. 專案實體
 CREATE TABLE projects (
   project_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   -- project_image BYTEA,                                 -- 捨棄直接存在資料庫的選項
@@ -49,7 +45,6 @@ CREATE TABLE projects (
   project_corporation TEXT NOT NULL,
   project_manager TEXT,
   -- project_inspector TEXT NOT NULL,                     -- 不需要有專案紀錄人員
-  -- project_email TEXT NOT NULL,
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
   -- corporation_id uuid REFERENCES corporations (corporation_id)
@@ -59,7 +54,7 @@ CREATE TABLE projects (
 CREATE TABLE works_on (
   works_on_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id uuid REFERENCES users (user_id),
-  project_id uuid REFERENCES projects (project_id),
+  project_id uuid REFERENCES projects (project_id),         -- CASCADE DELETE?
   manager BOOLEAN,
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -68,51 +63,62 @@ CREATE TABLE works_on (
 -- 缺失地點實體
 CREATE TABLE locations (
   location_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,
   location_name TEXT NOT NULL,
   floor TEXT,
   position TEXT,
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  project_id uuid REFERENCES projects (project_id)
+  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE manufacturers (
+  manufacturer_id PRIMARY KEY
+  project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,
+  manufacturer_name TEXT,
+  manufacturer_manager TEXT,
+  manufacturer_email TEXT,
+  manufacturer_phone TEXT,
+  create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 缺失所屬工項實體
 CREATE TABLE tasks (
   task_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,
   task_name TEXT,
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  project_id uuid REFERENCES projects (project_id)
+  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 缺失實體
 -- 參考ntu-SCon-frontend/models/Issue.js 中的定義
 CREATE TABLE issues (
-  issue_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),   -- 缺失ID
-  issue_image_path TEXT,                                  -- 缺失影像儲存路徑
-  issue_image_width BIGINT,                               -- 缺失影像寬
-  issue_image_height BIGINT,                              -- 缺失影像高
-  issue_title TEXT,                                       -- 缺失類別
-  issue_type TEXT,                                        -- 缺失項目
-  tracking_or_not BOOLEAN,                                -- 追蹤缺失
-  issue_location TEXT,                                    -- 缺失地點
-  issue_manufacturer TEXT,                                -- 責任廠商
-  issue_task TEXT,                                        -- 工項類別(選填)
-  issue_recorder TEXT,                                    -- 記錄人員(自動帶入App使用者名稱)
-  issue_status TEXT,                                      -- 缺失風險高低
-  create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  issue_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),                 -- 缺失ID
   project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,   -- 屬於哪個project
-  location_id uuid REFERENCES locations (location_id),     -- 在哪個地點
-  corporation_id REFERENCES corporations (corporation_id),
-  task_id REFERENCES tasks (task_id)
+  location_id uuid REFERENCES locations (location_id),                  -- 在哪個地點
+  manufacturer_id REFERENCES manufacturers (manufacturer_id),           -- 屬於哪個責任廠商
+  task_id REFERENCES tasks (task_id),                                   -- 屬於哪個工項
+  issue_image_path TEXT,                                                -- 缺失影像儲存路徑
+  issue_image_width BIGINT,                                             -- 缺失影像寬
+  issue_image_height BIGINT,                                            -- 缺失影像高
+  issue_title TEXT,                                                     -- 缺失類別
+  issue_type TEXT,                                                      -- 缺失項目
+  tracking_or_not BOOLEAN,                                              -- 追蹤缺失
+  issue_location TEXT,                                                  -- 缺失地點
+  issue_manufacturer TEXT,                                              -- 責任廠商
+  issue_task TEXT,                                                      -- 工項類別(選填)
+  issue_recorder TEXT,                                                  -- 記錄人員(自動帶入App使用者名稱)
+  issue_status TEXT,                                                    -- 缺失風險程度
+  create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 標註實體
 -- 參考ntu-SCon-frontend/models/IssueLabel.js 中的定義
 CREATE TABLE labels (
   label_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  issue_id uuid REFERENCES issues (issue_id),
+  issue_id uuid REFERENCES issues (issue_id) ON DELETE CASCADE,
   max_x FLOAT,
   max_y FLOAT,
   min_x FLOAT,
@@ -141,9 +147,10 @@ CREATE TABLE responsible_for (
   task_id uuid REFERENCES tasks (task_id)
 );
 
-
 -- 缺失類別實體(靜態)
--- CREATE TABLE violation_type ();
+CREATE TABLE violation_type (
+  
+);
 
 -- Update 使用者權限
 UPDATE users SET user_permission = '管理員';

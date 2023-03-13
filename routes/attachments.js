@@ -21,6 +21,30 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 
+router.patch('/remark/:issueId', async (req, res) => {
+  try {
+    console.log(req.body);
+    const issue_id = req.params.issueId;
+    const { issueAttachmentsRemark } = req.body;
+
+    const newRemark = await pool.query(
+      `UPDATE attachments
+       SET attachment_remark = $1
+       WHERE issue_id = $2
+       RETURNING *`, [
+        issueAttachmentsRemark, issue_id
+      ]
+    );
+    
+    console.log(newRemark.rows[0]);
+    res.json(newRemark.rows[0]);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(`Add an remark error: ${error}`);
+  }
+});
+
 router.post('/add/:issueId', upload.single('attachment'), async (req, res) => {
   try {
     const body = JSON.parse(req.body.metadata);
@@ -39,18 +63,15 @@ router.post('/add/:issueId', upload.single('attachment'), async (req, res) => {
     );
 
     console.log(newAttachment.rows);
-    // res.json({
-    //   attachment_id: newAttachment.rows[0].attachment_id,
-    //   path: newAttachment.rows[0].attachment_image_path,
-    //   message: '新增缺失改善後圖片成功',
-    // });
     res.json(newAttachment.rows[0]);
 
   } catch (error) {
+    console.log(error);
     res.status(500).json(`Add attachment error: ${error}`);
   }
 });
 
+// for IssueListScreen先get attach資料
 router.get('/list/:issueId', async (req, res) => {
   try {
     const issue_id = req.params.issueId;
@@ -73,7 +94,7 @@ router.get('/list/:issueId', async (req, res) => {
   }
 })
 
-router.get('/get/thumbnail/:id', async (req, res) => {
+router.get('/thumbnail/:id', async (req, res) => {
   try {
     const id = req.params.id;
 
