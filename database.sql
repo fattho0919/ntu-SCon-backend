@@ -13,13 +13,13 @@ CREATE TABLE corporations (
   project_id uuid REFERENCES projects (project_id)
 );
 
-CREATE TABLE roles (
+-- CREATE TABLE roles (
   
-);
+-- );
 
-CREATE TABLE permissions (
+-- CREATE TABLE permissions (
 
-);
+-- );
 
 -- 2. 使用者實體
 CREATE TABLE users (
@@ -44,10 +44,8 @@ CREATE TABLE projects (
   project_address TEXT NOT NULL,
   project_corporation TEXT NOT NULL,
   project_manager TEXT,
-  -- project_inspector TEXT NOT NULL,                     -- 不需要有專案紀錄人員
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-  -- corporation_id uuid REFERENCES corporations (corporation_id)
 );
 
 -- 使用者與專案多對多關係實體
@@ -72,7 +70,7 @@ CREATE TABLE locations (
 );
 
 CREATE TABLE manufacturers (
-  manufacturer_id PRIMARY KEY
+  manufacturer_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,
   manufacturer_name TEXT,
   manufacturer_manager TEXT,
@@ -97,8 +95,8 @@ CREATE TABLE issues (
   issue_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),                 -- 缺失ID
   project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,   -- 屬於哪個project
   location_id uuid REFERENCES locations (location_id),                  -- 在哪個地點
-  manufacturer_id REFERENCES manufacturers (manufacturer_id),           -- 屬於哪個責任廠商
-  task_id REFERENCES tasks (task_id),                                   -- 屬於哪個工項
+  manufacturer_id uuid REFERENCES manufacturers (manufacturer_id),           -- 屬於哪個責任廠商
+  task_id uuid REFERENCES tasks (task_id),                                   -- 屬於哪個工項
   issue_image_path TEXT,                                                -- 缺失影像儲存路徑
   issue_image_width BIGINT,                                             -- 缺失影像寬
   issue_image_height BIGINT,                                            -- 缺失影像高
@@ -144,15 +142,18 @@ CREATE TABLE attachments (
 CREATE TABLE responsible_for (
   responsible_for_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   corporation_id uuid REFERENCES corporations (corporation_id),
-  task_id uuid REFERENCES tasks (task_id)
+  task_id uuid REFERENCES tasks (task_id),
+  create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 缺失類別實體(靜態)
 CREATE TABLE violation_type (
-  
+
 );
 
 -- Update 使用者權限
 UPDATE users SET user_permission = '管理員';
 UPDATE users SET user_job = '教授' WHERE user_name != 'Cody Chen';
 UPDATE users SET user_job = '開發人員' WHERE user_name = 'Cody Chen';
+UPDATE users SET user_corporation = '臺大BIM中心' WHERE user_name = 'Cody Chen';
