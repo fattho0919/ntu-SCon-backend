@@ -100,8 +100,11 @@ CREATE TABLE issues (
   issue_image_path TEXT,                                                -- 缺失影像儲存路徑
   issue_image_width BIGINT,                                             -- 缺失影像寬
   issue_image_height BIGINT,                                            -- 缺失影像高
+  issue_title_prev TEXT,
   issue_title TEXT,                                                     -- 缺失類別
-  issue_type TEXT,                                                      -- 缺失項目
+  issue_type TEXT,                                                     -- 缺失項目
+  issue_description_prev TEXT,
+  issue_description, TEXT,    -- have not updated yet
   tracking_or_not BOOLEAN,                                              -- 追蹤缺失
   issue_location TEXT,                                                  -- 缺失地點
   issue_manufacturer TEXT,                                              -- 責任廠商
