@@ -1,12 +1,18 @@
 version: '3'
 
 services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+  redis:
+    image: redis
   app:
     build: .
     ports:
       - "3000:3000"
     environment:
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -16,9 +22,4 @@ services:
     depends_on:
       - postgres
       - redis
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: postgres
-  redis:
-    image: redis
+  
