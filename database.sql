@@ -3,7 +3,7 @@ CREATE DATABASE smartconstruction;
 -- set extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 1. 公司(甲方)實體
+-- 公司(甲方)實體
 CREATE TABLE corporations (
   corporation_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   corporation_name TEXT,
@@ -13,15 +13,15 @@ CREATE TABLE corporations (
   project_id uuid REFERENCES projects (project_id)
 );
 
--- CREATE TABLE roles (
+CREATE TABLE roles (
   
--- );
+);
 
--- CREATE TABLE permissions (
+CREATE TABLE permissions (
 
--- );
+);
 
--- 2. 使用者實體
+-- 使用者實體
 CREATE TABLE users (
   user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_name TEXT NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE users (
   -- corporation_id uuid REFERENCES corporations (corporation_id)
 );
 
--- 3. 專案實體
+-- 專案實體
 CREATE TABLE projects (
   project_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   -- project_image BYTEA,                                 -- 捨棄直接存在資料庫的選項
@@ -52,7 +52,7 @@ CREATE TABLE projects (
 CREATE TABLE works_on (
   works_on_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id uuid REFERENCES users (user_id),
-  project_id uuid REFERENCES projects (project_id),         -- CASCADE DELETE?
+  project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,
   manager BOOLEAN,
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -80,7 +80,7 @@ CREATE TABLE manufacturers (
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 缺失所屬工項實體
+-- 工項實體
 CREATE TABLE tasks (
   task_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,
@@ -90,26 +90,25 @@ CREATE TABLE tasks (
 );
 
 -- 缺失實體
--- 參考ntu-SCon-frontend/models/Issue.js 中的定義
 CREATE TABLE issues (
   issue_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),                 -- 缺失ID
   project_id uuid REFERENCES projects (project_id) ON DELETE CASCADE,   -- 屬於哪個project
   location_id uuid REFERENCES locations (location_id),                  -- 在哪個地點
-  manufacturer_id uuid REFERENCES manufacturers (manufacturer_id),           -- 屬於哪個責任廠商
-  task_id uuid REFERENCES tasks (task_id),                                   -- 屬於哪個工項
+  manufacturer_id uuid REFERENCES manufacturers (manufacturer_id),      -- 屬於哪個責任廠商
+  task_id uuid REFERENCES tasks (task_id),                              -- 屬於哪個工項
   issue_image_path TEXT,                                                -- 缺失影像儲存路徑
   issue_image_width BIGINT,                                             -- 缺失影像寬
   issue_image_height BIGINT,                                            -- 缺失影像高
-  issue_title_prev TEXT,
-  issue_title TEXT,                                                     -- 缺失類別
-  issue_type TEXT,                                                     -- 缺失項目
-  issue_description_prev TEXT,
-  issue_description, TEXT,    -- have not updated yet
+  issue_title_prev TEXT,                                                -- 模型自動辨識之缺失類別(not updated yet)
+  issue_title TEXT,                                                     -- 缺失類別(not updated yet)
+  issue_type TEXT,                                                      -- 缺失項目
+  issue_description_prev TEXT,                                          -- 模型自動辨識之缺失描述(not updated yet)
+  issue_description, TEXT,                                              -- 缺失描述(not updated yet)
   tracking_or_not BOOLEAN,                                              -- 追蹤缺失
   issue_location TEXT,                                                  -- 缺失地點
   issue_manufacturer TEXT,                                              -- 責任廠商
-  issue_task TEXT,                                                      -- 工項類別(選填)
-  issue_recorder TEXT,                                                  -- 記錄人員(自動帶入App使用者名稱)
+  issue_task TEXT,                                                      -- 工項類別
+  issue_recorder TEXT,                                                  -- 記錄人員
   issue_status TEXT,                                                    -- 缺失風險程度
   create_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
