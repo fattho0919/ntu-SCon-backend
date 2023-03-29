@@ -13,11 +13,23 @@ CREATE TABLE corporations (
   project_id uuid REFERENCES projects (project_id)
 );
 
-CREATE TABLE roles (
+-- CREATE TABLE roles (
   
+-- );
+
+CREATE TABLE role_permission (
+  permission_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  view_project BOOLEAN NOT NULL,
+  add_project BOOLEAN NOT NULL,
+  update_project BOOLEAN NOT NULL,
+  delete_project BOOLEAN NOT NULL,
+  view_issue BOOLEAN NOT NULL,
+  add_issue BOOLEAN NOT NULL,
+  update_issue BOOLEAN NOT NULL,
+  delete_issue BOOLEAN NOT NULL,
 );
 
-CREATE TABLE permissions (
+CREATE TABLE user_role (
 
 );
 
