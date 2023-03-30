@@ -23,17 +23,18 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 // 新增issue
-router.post('/add', upload.single('issue'), async (req, res) => {
+router.post('/', upload.single('issue'), async (req, res) => {
   try {
     console.log(req.body);
     var meta_json = JSON.parse(req.body.metadata);
     const {
       issue_image_width,        // 缺失影像寬
       issue_image_height,       // 缺失影像高
-      violationType,               // 缺失類別
+      violationType,            // 缺失類別
       issueType,                // 缺失項目
+      issueCaption,
       issueTrack,               // 追蹤缺失
-      issueLocationText,            // 追蹤地點
+      issueLocationText,        // 追蹤地點
       issueManufacturer,        // 責任廠商
       issueTask,                // 工項
       issueRecorder,            // 紀錄者(App使用者)
@@ -47,8 +48,9 @@ router.post('/add', upload.single('issue'), async (req, res) => {
         issue_image_path,
         issue_image_width,
         issue_image_height,
-        issue_title, 
-        issue_type,
+        issue_title_prev, 
+        issue_type_prev,
+        issue_caption_prev,
         tracking_or_not,
         issue_location,
         issue_manufacturer,
@@ -57,7 +59,7 @@ router.post('/add', upload.single('issue'), async (req, res) => {
         issue_status,
         project_id
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
       ) RETURNING *`,
       [
         path,
@@ -65,6 +67,7 @@ router.post('/add', upload.single('issue'), async (req, res) => {
         issue_image_height,
         violationType,
         issueType,
+        issueCaption,
         issueTrack,
         issueLocationText,
         issueManufacturer,
@@ -108,19 +111,19 @@ router.get('/get/thumbnail/:id', async (req, res) => {
 });
 
 // 更新issue
-router.patch('/update/:issueId', async (req, res) => {
+router.patch('/:issueId', async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
     const issue_id = req.params.issueId;
-    // var update_data = JSON.parse(req.body);
-    // console.log(update_data);
+
     const {
-      violationType,               // 缺失類別
+      violationType,            // 缺失類別
       issueType,                // 缺失項目
+      issueCaption,
       issueTrack,               // 追蹤缺失
       issueLocationText,        // 追蹤地點
       responsibleCorporation,   // 責任廠商
-      issueTask,            // 工項
+      issueTask,                // 工項
       issueRecorder,            // 紀錄者(App使用者)
       issueStatus,              // 缺失風險高低
       projectId                 // 所屬專案
@@ -130,16 +133,18 @@ router.patch('/update/:issueId', async (req, res) => {
       `UPDATE issues
        SET issue_title = $1,
            issue_type = $2,
-           tracking_or_not = $3,
-           issue_location = $4,
-           issue_manufacturer = $5,
-           issue_task = $6,
-           issue_recorder = $7,
-           issue_status = $8
-       WHERE issue_id = $9
+           issue_caption = $3,
+           tracking_or_not = $4,
+           issue_location = $5,
+           issue_manufacturer = $6,
+           issue_task = $7,
+           issue_recorder = $8,
+           issue_status = $9
+       WHERE issue_id = $10
       `, [
         violationType,            // 缺失類別
         issueType,                // 缺失項目
+        issueCaption,
         issueTrack,               // 追蹤缺失
         issueLocationText,        // 追蹤地點
         responsibleCorporation,   // 責任廠商
@@ -159,9 +164,19 @@ router.patch('/update/:issueId', async (req, res) => {
 });
 
 // 刪除issue
-router.delete('/delete/:issueId', async (req, res) => {
+router.delete('/:issueId', async (req, res) => {
   try {
-    
+    const issueId = req.params.issueId;
+
+    const deleteIssue = await pool.query(
+      `DELETE FROM issues WHERE issue_id = $1`,
+      [issueId]
+    );
+
+    res.json({
+      message: `刪除缺失成功`
+    });
+
   } catch (error) {
     console.log(error);
     res.status(500).json(`伺服器錯誤: ${error.message}, 請稍後再試`);

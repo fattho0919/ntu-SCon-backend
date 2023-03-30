@@ -45,7 +45,7 @@ router.patch('/remark/:issueId', async (req, res) => {
   }
 });
 
-router.post('/add/:issueId', upload.single('attachment'), async (req, res) => {
+router.post('/:issueId', upload.single('attachment'), async (req, res) => {
   try {
     const body = JSON.parse(req.body.metadata);
     const issue_id = req.params.issueId;

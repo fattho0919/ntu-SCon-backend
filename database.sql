@@ -13,12 +13,17 @@ CREATE TABLE corporations (
   project_id uuid REFERENCES projects (project_id)
 );
 
--- CREATE TABLE roles (
+CREATE TABLE roles (
   
--- );
+);
 
 CREATE TABLE role_permission (
   permission_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  permission_level TEXT NOT NULL,
+  view_user BOOLEAN NOT NULL,
+  add_user  BOOLEAN NOT NULL,
+  update_user BOOLEAN NOT NULL,
+  delete_user BOOLEAN NOT NULL,
   view_project BOOLEAN NOT NULL,
   add_project BOOLEAN NOT NULL,
   update_project BOOLEAN NOT NULL,
@@ -27,6 +32,51 @@ CREATE TABLE role_permission (
   add_issue BOOLEAN NOT NULL,
   update_issue BOOLEAN NOT NULL,
   delete_issue BOOLEAN NOT NULL,
+  view_location BOOLEAN NOT NULL,
+  add_location BOOLEAN NOT NULL,
+  update_location BOOLEAN NOT NULL,
+  delete_location BOOLEAN NOT NULL,
+  view_manufacturer BOOLEAN NOT NULL,
+  add_manufacturer BOOLEAN NOT NULL,
+  update_manufacturer BOOLEAN NOT NULL,
+  delete_manufacturer BOOLEAN NOT NULL,
+  view_task BOOLEAN NOT NULL,
+  add_task BOOLEAN NOT NULL,
+  update_task BOOLEAN NOT NULL,
+  delete_task BOOLEAN NOT NULL
+);
+
+INSERT INTO role_permission (
+  permission_level,
+  view_user,
+  add_user,
+  update_user,
+  delete_user,
+  view_project,
+  add_project,
+  update_project,
+  delete_project,
+  view_issue,
+  add_issue,
+  update_issue,
+  delete_issue,
+  view_location,
+  add_location,
+  update_location,
+  delete_location,
+  view_manufacturer,
+  add_manufacturer,
+  update_manufacturer,
+  delete_manufacturer,
+  view_task,
+  add_task,
+  update_task,
+  delete_task
+) VALUES (
+  -- '管理員', true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
+  '專案負責人', true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
+  '專案使用者', true, true, false, false, true, false, false, false, true, true, true, true, true, true, false, false, true, true, false, false, true, true, false, false
+  '訪客', true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false
 );
 
 CREATE TABLE user_role (
@@ -113,12 +163,15 @@ CREATE TABLE issues (
   issue_image_height BIGINT,                                            -- 缺失影像高
   issue_title_prev TEXT,                                                -- 模型自動辨識之缺失類別(not updated yet)
   issue_title TEXT,                                                     -- 缺失類別(not updated yet)
+  issue_type_prev TEXT,
   issue_type TEXT,                                                      -- 缺失項目
-  issue_description_prev TEXT,                                          -- 模型自動辨識之缺失描述(not updated yet)
-  issue_description, TEXT,                                              -- 缺失描述(not updated yet)
+  issue_caption_prev TEXT,                                          -- 模型自動辨識之缺失描述(not updated yet)
+  issue_caption TEXT,                                              -- 缺失描述(not updated yet)
   tracking_or_not BOOLEAN,                                              -- 追蹤缺失
   issue_location TEXT,                                                  -- 缺失地點
   issue_manufacturer TEXT,                                              -- 責任廠商
+  issue_penelty BIGINT,                                                 
+  issue_deadline TIMESTAMP,
   issue_task TEXT,                                                      -- 工項類別
   issue_recorder TEXT,                                                  -- 記錄人員
   issue_status TEXT,                                                    -- 缺失風險程度
@@ -161,13 +214,10 @@ CREATE TABLE responsible_for (
   update_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 缺失類別實體(靜態)
-CREATE TABLE violation_type (
-
-);
-
 -- Update 使用者權限
 UPDATE users SET user_permission = '管理員';
 UPDATE users SET user_job = '教授' WHERE user_name != 'Cody Chen';
 UPDATE users SET user_job = '開發人員' WHERE user_name = 'Cody Chen';
 UPDATE users SET user_corporation = '臺大BIM中心' WHERE user_name = 'Cody Chen';
+
+DELETE FROM table_name WHERE condition;

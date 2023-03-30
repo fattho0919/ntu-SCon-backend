@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
 const jwtr = require('../services/jwtr');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwtGenerator = require('../utils/jwtGenerator');
 const validation = require("../middleware/validation");				// 確認信箱格式、必填資訊是否存在
 const authorization = require("../middleware/authorization");	// 確認用戶是否擁有token
@@ -23,8 +23,8 @@ router.post('/register', validation, async (req, res) => {
 		}
 
 		const saltRounds = 10;
-		const salt = await bcrypt.genSalt(saltRounds);
-		const bcryptPassword = await bcrypt.hash(password, salt);
+		const salt = await bcrypt.genSaltSync(saltRounds);
+		const bcryptPassword = await bcrypt.hashSync(password, salt);
 		
 		const newUser = await pool.query(
 			`INSERT INTO users (
@@ -75,7 +75,7 @@ router.post('/login', validation, async (req, res) => {
 			return res.status(401).json('使用者不存在或密碼錯誤');
 		}
 
-		const validPassword = await bcrypt.compare(
+		const validPassword = await bcrypt.compareSync(
 			password, user.rows[0].user_password
 		);
 

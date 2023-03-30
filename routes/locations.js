@@ -21,7 +21,7 @@ router.post('/add', async (req, res) => {
     console.log(newLocation.rows);
 
   } catch (error) {
-    console.log(error);
+    res.status(500).json(`伺服器錯誤: ${error.message}, 請稍候再試`);
   }
 });
 
@@ -43,7 +43,7 @@ router.get('/list/:projectId', async (req, res) => {
     res.json(issueLocations.rows);
 
   } catch (error) {
-    console.log(`get locations error: ${error}`);
+    res.status(500).json(`伺服器錯誤: ${error.message}, 請稍候再試`);
   }
 });
 

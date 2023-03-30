@@ -12,4 +12,5 @@ COPY . .
 
 EXPOSE 3000
 
+# Can modify back to `npm start`
 CMD ["sh", "-c", "redis-server & npm start"]
