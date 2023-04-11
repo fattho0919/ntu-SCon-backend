@@ -218,6 +218,6 @@ CREATE TABLE responsible_for (
 UPDATE users SET user_permission = '管理員';
 UPDATE users SET user_job = '教授' WHERE user_name != 'Cody Chen';
 UPDATE users SET user_job = '開發人員' WHERE user_name = 'Cody Chen';
-UPDATE users SET user_corporation = '臺大BIM中心' WHERE user_name = 'Cody Chen';
+UPDATE users SET user_cornpporation = '臺大BIM中心' WHERE user_name = 'Cody Chen';
 
 DELETE FROM table_name WHERE condition;

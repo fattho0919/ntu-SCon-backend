@@ -7,10 +7,10 @@ router.post('/add', async (req, res) => {
     const { company, manager, phone_number, projectId } = req.body;
 
     const newCorp = await pool.query(
-      `INSERT INTO corporations (
-        corporation_name,
-        corporation_manager,
-        corporation_phone,
+      `INSERT INTO manufacturers (
+        manufacturer_name,
+        manufacturer_manager,
+        manufacturer_phone,
         project_id
       ) VALUES (
         $1, $2, $3, $4
@@ -43,7 +43,7 @@ router.get('/list/:projectId', async (req, res) => {
 
     const corporationList = await pool.query(
       `SELECT *
-       FROM corporations
+       FROM manufacturers
        WHERE project_id = $1`, [
         projectId
       ]

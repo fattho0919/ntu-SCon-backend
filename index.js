@@ -33,6 +33,8 @@ app.use('/labels', require('./routes/labels'));
 
 app.use('/attachments', require('./routes/attachments'));
 
+app.use('/sheet', require('./routes/sheet'));
+
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
 });
