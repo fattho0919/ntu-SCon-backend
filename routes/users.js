@@ -1,13 +1,11 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
+const authorization = require('../src/middleware/authorization');
 
 router.get('/all', async(req, res) => {
   try {
     const allUsers = await pool.query(
-      `SELECT user_id, user_name, user_corporation, user_permission, user_job
-       FROM users
-       ORDER BY user_corporation, user_permission`
+      `SELECT user_id, user_name, user_job FROM users`
     );
 
     // console.log(allUsers.rows);
@@ -47,15 +45,23 @@ router.get('/:corporation', async(req, res) => {
     let corporation = req.params.corporation;
     console.log(corporation);
 
+    const corporationID = await pool.query(
+      `SELECT corporation_id FROM corporations WHERE corporation_name = $1`,
+      [ corporation ]
+    );
+
     const subUsers = await pool.query(
-      `SELECT user_id, user_name, user_corporation, user_permission, user_job
-       FROM users
-       WHERE user_corporation = $1`, [
-      corporation
-      ]
+      `
+      SELECT u.user_id, u.user_name, u.user_job, ur.permission_level
+      FROM users u
+      JOIN user_role ur ON u.user_id = ur.user_id
+      WHERE u.corporation_id = $1;
+      `,
+      [ corporationID.rows[0].corporation_id ]
     );
     
-    console.log(subUsers)
+    // 
+    console.log(subUsers.rows);
     res.json(subUsers.rows);
 
   } catch (error) {

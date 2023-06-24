@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
+const authorization = require('../src/middleware/authorization');
 
 router.post('/:userId/:projectId', async (req, res) => {
   try {
@@ -8,17 +8,25 @@ router.post('/:userId/:projectId', async (req, res) => {
     let userId = req.params.userId;
     let projectId = req.params.projectId;
 
-    // 需事先檢查table內有沒有既有的bind關聯
+    const check = await pool.query(
+      `SELECT * FROM participate WHERE user_id = $1`,
+      [userId]
+    );
 
-    const works_on = await pool.query(
-      `INSERT INTO works_on (
+    if (check !== 0) {
+      return res.status(400).json('此使用者已隸屬於此專案');
+    }
+
+    const tmp = await pool.query(
+      `
+      INSERT INTO participate (
         user_id,
         project_id
       ) VALUES (
         $1, $2
-      ) RETURNING *`, [
-        userId, projectId
-      ]
+      ) RETURNING *
+      `,
+      [ userId, projectId ]
     );
 
     let user_id = works_on.rows[0].user_id;
@@ -31,17 +39,6 @@ router.post('/:userId/:projectId', async (req, res) => {
         user_id
       ]
     );
-    let user_name = select_project_manager_name.rows[0].user_name;
-
-    const bind = await pool.query(
-      `UPDATE projects
-       SET project_manager = $1
-       WHERE project_id = $2`, [
-        user_name, project_id
-      ]
-    );
-
-    console.log(bind.rows[0]);
 
     res.json(works_on.rows);
     

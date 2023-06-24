@@ -1,20 +1,16 @@
 const router = require('express').Router();
 const { Router } = require('express');
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
+const authorization = require('../src/middleware/authorization');
 
 router.post('/manage', /*authorization,*/ async(req, res) => {
   try {
-    // 取得用戶uuid, project_id
     const user = req.body;
     console.log(user);
      
     const user_new_permission = await pool.query(
-      `UPDATE users
-       SET user_permission = $1
-       WHERE user_id = $2 RETURNING *`, [
-        user.permission, user.userId
-      ]
+      `UPDATE user_role SET permission_level = $1 WHERE user_id = $2 RETURNING *`,
+      [ user.permission, user.userId ]
     );
 
     res.json(user_new_permission);

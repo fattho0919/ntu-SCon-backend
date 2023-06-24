@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
+const authorization = require('../src/middleware/authorization');
 
 router.post('/add', async (req, res) => {
   try {

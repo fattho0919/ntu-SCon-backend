@@ -1,58 +1,49 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
+const authorization = require('../src/middleware/authorization');
 
-router.post('/add', async (req, res) => {
+router.get('/all', async (req, res) => {
   try {
-    const { company, manager, phone_number, projectId } = req.body;
-
-    const newCorp = await pool.query(
-      `INSERT INTO manufacturers (
-        manufacturer_name,
-        manufacturer_manager,
-        manufacturer_phone,
-        project_id
-      ) VALUES (
-        $1, $2, $3, $4
-      ) RETURNING *`, [
-        company, manager, phone_number, projectId
-      ]
+    const corporations = await pool.query(
+      `SELECT * FROM corporations`
     );
-
-    res.json(newCorp.rows[0]);
-
+    console.log(corporations.rows);
+    res.json(corporations.rows);
   } catch (error) {
-    console.log(error);
-    res.status(500).json(`Add corporation error: ${error}`);
+    res.status(500).json('伺服器錯誤');
   }
 });
 
-// router.get('/list/all', async (req, res) => {
-//   try {
-    
-    
-
-//   } catch (error) {
-    
-//   }
-// });
-
-router.get('/list/:projectId', async (req, res) => {
-  let projectId = req.params.projectId;
+router.get('/:projectID', async (req, res) => {
   try {
+    const corporations = await pool.query(
+      `SELECT * FROM corporations`
+    );
+    console.log(corporations.rows);
+    res.json(corporations.rows);
+  } catch (error) {
+    res.status(500).json('伺服器錯誤');
+  }
+});
 
-    const corporationList = await pool.query(
-      `SELECT *
-       FROM manufacturers
-       WHERE project_id = $1`, [
-        projectId
-      ]
+router.post('/:type', async (req, res) => {
+  try {
+    const type = req.params.type;
+    const { company, projectId } = req.body;
+    console.log(company);
+    console.log(projectId);
+
+    const new_corporation = await pool.query(
+      `
+      INSERT INTO corporations (corporation_name, corporation_type)
+      VALUES ($1, $2)
+      `,
+      [ company, type ]
     );
 
-    res.json(corporationList.rows);
+    res.json('新增責任廠商成功');
 
   } catch (error) {
-    console.log(`Get corporation list from ${projectId} error: ${error}`);
     res.status(500).json('伺服器錯誤');
   }
 });

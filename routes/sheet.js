@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
-var xl = require('excel4node');
-
-// const status = ['無風險', '有風險，須改善', '有風險，須立即改善'];
+const authorization = require('../src/middleware/authorization');
+const xl = require('excel4node');
+const wb = new xl.Workbook();
 
 router.get('/:projectId', async (req, res) => {
   try {

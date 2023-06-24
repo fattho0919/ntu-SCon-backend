@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const pool = require('../services/pool');
-const authorization = require('../middleware/authorization');
+const authorization = require('../src/middleware/authorization');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -25,21 +25,24 @@ const upload = multer({storage: storage});
 // 新增issue
 router.post('/', upload.single('issue'), async (req, res) => {
   try {
-    console.log(req.body);
     var meta_json = JSON.parse(req.body.metadata);
+    console.log('meta_json', meta_json);
     const {
       issue_image_width,        // 缺失影像寬
       issue_image_height,       // 缺失影像高
       violationType,            // 缺失類別
       issueType,                // 缺失項目
-      issueCaption,
+      issueCaption,             // 缺失描述
       issueTrack,               // 追蹤缺失
       issueLocationText,        // 追蹤地點
       issueManufacturer,        // 責任廠商
       issueTask,                // 工項
       issueRecorder,            // 紀錄者(App使用者)
       issueStatus,              // 缺失風險高低
-      projectId                 // 所屬專案
+      projectId,                // 所屬專案
+      projectName,
+      projectCorporation,
+      senderId,
     } = meta_json;
     const { path } = req.file;
 
@@ -113,9 +116,8 @@ router.get('/get/thumbnail/:id', async (req, res) => {
 // 更新issue
 router.patch('/:issueId', async (req, res) => {
   try {
-    console.log(req.body);
     const issue_id = req.params.issueId;
-
+    console.log(req.body);
     const {
       violationType,            // 缺失類別
       issueType,                // 缺失項目
@@ -126,7 +128,10 @@ router.patch('/:issueId', async (req, res) => {
       issueTask,                // 工項
       issueRecorder,            // 紀錄者(App使用者)
       issueStatus,              // 缺失風險高低
-      projectId                 // 所屬專案
+      projectId,                // 所屬專案
+      projectName,
+      projectCorporation,
+      senderId,
     } = req.body;
 
     const updateIssue = await pool.query(
@@ -148,12 +153,40 @@ router.patch('/:issueId', async (req, res) => {
         issueTrack,               // 追蹤缺失
         issueLocationText,        // 追蹤地點
         responsibleCorporation,   // 責任廠商
-        issueTask,            // 工項
+        issueTask,                // 工項
         issueRecorder,            // 紀錄者(App使用者)
         issueStatus,              // 缺失風險高低
         issue_id
       ]
     );
+    console.log('責任廠商', responsibleCorporation);
+
+    // 選出責任廠商所有人員
+    const responsibleCorporationStaff = await pool.query(
+      `SELECT user_id FROM users WHERE corporation_id = (
+        SELECT corporation_id FROM corporations WHERE corporation_name = $1
+      )`,
+      [ responsibleCorporation ]
+    );
+    console.log(responsibleCorporationStaff.rows[0])
+    const receiverId = responsibleCorporationStaff.rows[0].user_id;
+
+    // 通知所有責任廠商人員
+    // 目前僅一個 user
+    // 未實作通知所有 user
+    const newNotification = await pool.query(
+      `INSERT INTO notifications (
+        sender_id,
+        receiver_id,
+        notify_msg
+      ) VALUES (
+        $1, $2, $3
+      ) RETURNING *`, [
+        senderId, receiverId, `請盡快修復${projectName}中, 位於${issueLocationText}的${violationType}缺失`,
+      ]
+    );
+
+    console.log(newNotification.rows);
 
     res.json('更新缺失成功');
 
